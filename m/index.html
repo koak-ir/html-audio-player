@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QaTrak Audio Player</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Inter,sans-serif;
+    background:linear-gradient(135deg,#0f172a,#111827,#000);
+    color:white;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px;
+}
+
+.container{
+    width:900px;
+    max-width:100%;
+    background:rgba(255,255,255,.05);
+    backdrop-filter:blur(15px);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+
+.header{
+    padding:25px 30px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.header h1{
+    font-size:28px;
+    font-weight:700;
+}
+
+.header p{
+    margin-top:8px;
+    color:#94a3b8;
+}
+
+audio{
+    width:100%;
+    margin-top:25px;
+}
+
+.list{
+    max-height:500px;
+    overflow:auto;
+}
+
+.item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 25px;
+    cursor:pointer;
+    transition:.25s;
+    border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.item:hover{
+    background:rgba(255,255,255,.08);
+}
+
+.item.active{
+    background:linear-gradient(90deg,#2563eb,#1d4ed8);
+}
+
+.item-name{
+    font-size:15px;
+}
+
+.play-icon{
+    font-size:18px;
+}
+
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#334155;
+    border-radius:20px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>🎵 Audio Player</h1>
+        <p>Click any track to play</p>
+
+        <audio id="player" controls autoplay></audio>
+    </div>
+
+    <div class="list" id="playlist"></div>
+
+</div>
+
+<script>
+
+// لیست فایل ها
+const files = [
+    "audio/1.mp3",
+    "audio/2.mp3",
+    "audio/3.mp3",
+    "audio/4.mp3",
+    "audio/5.mp3",
+];
+
+const player = document.getElementById("player");
+const playlist = document.getElementById("playlist");
+
+function load(index){
+
+    player.src = files[index];
+    player.play();
+
+    document.querySelectorAll(".item").forEach(x=>x.classList.remove("active"));
+    document.getElementById("track-"+index).classList.add("active");
+}
+
+files.forEach((file,index)=>{
+
+    const div=document.createElement("div");
+    div.className="item";
+    div.id="track-"+index;
+
+    const name=file.split("/").pop();
+
+    div.innerHTML=`
+        <div class="item-name">${name}</div>
+        <div class="play-icon">▶</div>
+    `;
+
+    div.onclick=()=>load(index);
+
+    playlist.appendChild(div);
+
+});
+
+
+load(0);
+
+
+player.addEventListener("ended",()=>{
+
+    let current=files.indexOf(player.getAttribute("src"));
+
+    if(current==-1)return;
+
+    current++;
+
+    if(current>=files.length)
+        current=0;
+
+    load(current);
+
+});
+
+</script>
+
+</body>
+</html>
