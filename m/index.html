@@ -1,101 +1,266 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QaTrak Audio Player</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QaTrak Audio Player</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
 
-body{
-    font-family:Inter,sans-serif;
-    background:linear-gradient(135deg,#0f172a,#111827,#000);
-    color:white;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:40px;
-}
+        body{
+            font-family:Inter,sans-serif;
+            background:linear-gradient(145deg,#2c1810,#1a0f0a,#0d0805);
+            color:#f0e0d0;
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            padding:40px;
+        }
 
-.container{
-    width:900px;
-    max-width:100%;
-    background:rgba(255,255,255,.05);
-    backdrop-filter:blur(15px);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:20px;
-    overflow:hidden;
-    box-shadow:0 20px 60px rgba(0,0,0,.5);
-}
+        .container{
+            width:900px;
+            max-width:100%;
+            background:linear-gradient(160deg,#3d231a,#2a1710,#1a0f0a);
+            backdrop-filter:blur(15px);
+            border:1px solid rgba(180,120,80,0.25);
+            border-radius:24px;
+            overflow:hidden;
+            box-shadow:0 25px 80px rgba(0,0,0,0.8), inset 0 1px 0 rgba(200,150,100,0.1);
+        }
 
-.header{
-    padding:25px 30px;
-    border-bottom:1px solid rgba(255,255,255,.08);
-}
+        .header{
+            padding:28px 32px;
+            border-bottom:1px solid rgba(180,120,80,0.15);
+            background:linear-gradient(180deg,rgba(60,35,25,0.6),transparent);
+        }
 
-.header h1{
-    font-size:28px;
-    font-weight:700;
-}
+        .header h1{
+            font-size:28px;
+            font-weight:700;
+            color:#f0d5c0;
+            text-shadow:0 2px 10px rgba(0,0,0,0.5);
+            letter-spacing:-0.5px;
+        }
 
-.header p{
-    margin-top:8px;
-    color:#94a3b8;
-}
+        .header h1 span{
+            color:#d4a080;
+        }
 
-audio{
-    width:100%;
-    margin-top:25px;
-}
+        .header p{
+            margin-top:8px;
+            color:#b8957a;
+            font-size:14px;
+            letter-spacing:0.3px;
+        }
 
-.list{
-    max-height:500px;
-    overflow:auto;
-}
+        audio{
+            width:100%;
+            margin-top:22px;
+            background:#1a0f0a;
+            border-radius:12px;
+            height:54px;
+        }
 
-.item{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:18px 25px;
-    cursor:pointer;
-    transition:.25s;
-    border-bottom:1px solid rgba(255,255,255,.05);
-}
+        audio::-webkit-media-controls-panel{
+            background:linear-gradient(135deg,#2a1710,#1a0f0a);
+            border-radius:12px;
+            border:1px solid rgba(180,120,80,0.2);
+        }
 
-.item:hover{
-    background:rgba(255,255,255,.08);
-}
+        audio::-webkit-media-controls-current-time-display,
+        audio::-webkit-media-controls-time-remaining-display{
+            color:#d4a080;
+        }
 
-.item.active{
-    background:linear-gradient(90deg,#2563eb,#1d4ed8);
-}
+        audio::-webkit-media-controls-timeline{
+            background:#3d231a;
+            border-radius:4px;
+        }
 
-.item-name{
-    font-size:15px;
-}
+        audio::-webkit-media-controls-volume-slider{
+            background:#3d231a;
+            border-radius:4px;
+        }
 
-.play-icon{
-    font-size:18px;
-}
+        .list{
+            max-height:520px;
+            overflow:auto;
+            padding:6px 0;
+        }
 
-::-webkit-scrollbar{
-    width:8px;
-}
+        .list::-webkit-scrollbar{
+            width:6px;
+        }
 
-::-webkit-scrollbar-thumb{
-    background:#334155;
-    border-radius:20px;
-}
-</style>
+        .list::-webkit-scrollbar-track{
+            background:transparent;
+        }
+
+        .list::-webkit-scrollbar-thumb{
+            background:#5a3a2a;
+            border-radius:20px;
+        }
+
+        .list::-webkit-scrollbar-thumb:hover{
+            background:#7a4f3a;
+        }
+
+        .item{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:16px 28px;
+            cursor:pointer;
+            transition:all 0.3s ease;
+            border-bottom:1px solid rgba(180,120,80,0.06);
+            position:relative;
+        }
+
+        .item:hover{
+            background:linear-gradient(90deg,rgba(180,120,80,0.12),rgba(180,120,80,0.04));
+            padding-right:34px;
+        }
+
+        .item.active{
+            background:linear-gradient(90deg,#5a3a2a,rgba(90,58,42,0.6));
+            border-right:4px solid #d4a080;
+            box-shadow:inset 0 1px 0 rgba(200,150,100,0.1);
+        }
+
+        .item.active .item-name{
+            color:#f0d5c0;
+            font-weight:600;
+        }
+
+        .item-name{
+            font-size:15px;
+            color:#c9b09b;
+            transition:color 0.3s;
+            font-weight:400;
+            letter-spacing:0.2px;
+            display:flex;
+            align-items:center;
+            gap:12px;
+        }
+
+        .item-name::before{
+            content:"♪";
+            color:#5a3a2a;
+            font-size:18px;
+            transition:color 0.3s;
+        }
+
+        .item.active .item-name::before{
+            color:#d4a080;
+        }
+
+        .play-icon{
+            font-size:16px;
+            color:#7a4f3a;
+            transition:all 0.3s;
+            width:24px;
+            text-align:center;
+        }
+
+        .item.active .play-icon{
+            color:#d4a080;
+            transform:scale(1.1);
+        }
+
+        .item .track-number{
+            color:#5a3a2a;
+            font-size:13px;
+            font-weight:600;
+            margin-left:12px;
+            min-width:24px;
+        }
+
+        .item.active .track-number{
+            color:#d4a080;
+        }
+
+        .item.playing .play-icon{
+            animation:pulse 1.2s ease-in-out infinite;
+        }
+
+        @keyframes pulse{
+            0%,100%{opacity:1;transform:scale(1);}
+            50%{opacity:0.5;transform:scale(0.9);}
+        }
+
+
+        .file-info{
+            display:flex;
+            align-items:center;
+            gap:10px;
+        }
+
+        .item::after{
+            content:"";
+            position:absolute;
+            bottom:0;
+            left:0;
+            right:0;
+            height:1px;
+            background:linear-gradient(90deg,transparent,rgba(180,120,80,0.1),transparent);
+            opacity:0;
+            transition:opacity 0.3s;
+        }
+
+        .item:hover::after{
+            opacity:1;
+        }
+
+        /* رنگی کردن نام فایل‌ها با پسوند */
+        .item-name .ext{
+            color:#5a3a2a;
+            font-size:12px;
+            font-weight:300;
+        }
+
+        .item.active .ext{
+            color:#b07a5a;
+        }
+
+        .track-count{
+            font-size:12px;
+            color:#5a3a2a;
+            background:rgba(90,58,42,0.3);
+            padding:2px 12px;
+            border-radius:20px;
+            border:1px solid rgba(180,120,80,0.1);
+        }
+
+
+        @keyframes slideIn{
+            from{opacity:0;transform:translateY(-8px);}
+            to{opacity:1;transform:translateY(0);}
+        }
+
+        .item{
+            animation:slideIn 0.3s ease forwards;
+        }
+
+        .item:nth-child(1){animation-delay:0.05s;}
+        .item:nth-child(2){animation-delay:0.1s;}
+        .item:nth-child(3){animation-delay:0.15s;}
+        .item:nth-child(4){animation-delay:0.2s;}
+        .item:nth-child(5){animation-delay:0.25s;}
+        .item:nth-child(6){animation-delay:0.3s;}
+        .item:nth-child(7){animation-delay:0.35s;}
+        .item:nth-child(8){animation-delay:0.4s;}
+        .item:nth-child(9){animation-delay:0.45s;}
+        .item:nth-child(10){animation-delay:0.5s;}
+
+    </style>
 
 </head>
 <body>
@@ -103,8 +268,8 @@ audio{
 <div class="container">
 
     <div class="header">
-        <h1>🎵 Audio Player</h1>
-        <p>Click any track to play</p>
+        <h1>🎵 <span>QaTrak</span> Audio</h1>
+        <p>🎧 برای پخش، روی هر آهنگ کلیک کنید</p>
 
         <audio id="player" controls autoplay></audio>
     </div>
@@ -115,64 +280,95 @@ audio{
 
 <script>
 
-// لیست فایل ها
-const files = [
-    "audio/1.mp3",
-    "audio/2.mp3",
-    "audio/3.mp3",
-    "audio/4.mp3",
-    "audio/5.mp3",
-];
 
-const player = document.getElementById("player");
-const playlist = document.getElementById("playlist");
+    const files = [
+        { src: "/audio/m01.mp3", name: "آهنگ شماره یک" },
+        { src: "/audio/m02.mp3", name: "آهنگ شماره دو" },
+        { src: "/audio/m03.mp3", name: "آهنگ شماره سه" },
+        { src: "/audio/m04.mp3", name: "آهنگ شماره چهار" },
+        { src: "/audio/m05.mp3", name: "آهنگ شماره پنج" },
+        { src: "/audio/m06.mp3", name: "آهنگ شماره شش" },
+        { src: "/audio/m07.mp3", name: "آهنگ شماره هفت" },
+        { src: "/audio/m08.mp3", name: "آهنگ شماره هشت" },
+        { src: "/audio/m09.mp3", name: "آهنگ شماره نه" },
+        { src: "/audio/m10.mp3", name: "آهنگ شماره ده" },
+    ];
 
-function load(index){
+    const player = document.getElementById("player");
+    const playlist = document.getElementById("playlist");
+    let currentIndex = 0;
 
-    player.src = files[index];
-    player.play();
+    function load(index){
 
-    document.querySelectorAll(".item").forEach(x=>x.classList.remove("active"));
-    document.getElementById("track-"+index).classList.add("active");
-}
+        if(index < 0 || index >= files.length) return;
 
-files.forEach((file,index)=>{
+        currentIndex = index;
+        player.src = files[index].src;
+        player.play();
 
-    const div=document.createElement("div");
-    div.className="item";
-    div.id="track-"+index;
 
-    const name=file.split("/").pop();
+        document.querySelectorAll(".item").forEach((x, i) => {
+            x.classList.remove("active", "playing");
+            if(i === index) {
+                x.classList.add("active", "playing");
+            }
+        });
+    }
 
-    div.innerHTML=`
-        <div class="item-name">${name}</div>
+
+    files.forEach((file, index) => {
+
+        const div = document.createElement("div");
+        div.className = "item";
+        div.id = "track-" + index;
+
+
+        const ext = file.src.split('.').pop();
+
+        div.innerHTML = `
+        <div class="file-info">
+            <span class="track-number">${String(index + 1).padStart(2, '0')}</span>
+            <div class="item-name">
+                ${file.name}
+                <span class="ext">.${ext}</span>
+            </div>
+        </div>
         <div class="play-icon">▶</div>
     `;
 
-    div.onclick=()=>load(index);
+        div.onclick = () => load(index);
+        playlist.appendChild(div);
 
-    playlist.appendChild(div);
-
-});
-
-
-load(0);
+    });
 
 
-player.addEventListener("ended",()=>{
+    load(0);
 
-    let current=files.indexOf(player.getAttribute("src"));
 
-    if(current==-1)return;
+    player.addEventListener("ended", () => {
+        let next = currentIndex + 1;
+        if(next >= files.length) next = 0;
+        load(next);
+    });
 
-    current++;
 
-    if(current>=files.length)
-        current=0;
+    player.addEventListener("play", () => {
+        document.querySelectorAll(".item").forEach(x => x.classList.remove("playing"));
+        const active = document.querySelector(".item.active");
+        if(active) active.classList.add("playing");
+    });
 
-    load(current);
+    player.addEventListener("pause", () => {
+        document.querySelectorAll(".item").forEach(x => x.classList.remove("playing"));
+    });
 
-});
+
+    player.addEventListener("play", () => {
+        const currentFile = files[currentIndex];
+        if(currentFile) {
+            document.title = `🎵 ${currentFile.name} - QaTrak Audio`;
+        }
+    });
 
 </script>
 
