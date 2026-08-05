@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QaTrak Audio Player</title>
+    <title>Noonica.ir</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet"
+          href="/m/plyr.css">
     <style>
         *{
             margin:0;
@@ -260,6 +261,57 @@
         .item:nth-child(9){animation-delay:0.45s;}
         .item:nth-child(10){animation-delay:0.5s;}
 
+        :root{
+
+            --plyr-color-main:#b97a56;
+
+            --plyr-audio-controls-background:#24140e;
+
+            --plyr-menu-background:#2b1b13;
+
+            --plyr-tooltip-background:#b97a56;
+
+            --plyr-tooltip-color:#fff;
+
+            --plyr-range-fill-background:#b97a56;
+
+            --plyr-range-thumb-background:#fff;
+
+            --plyr-control-icon-size:18px;
+
+        }
+
+        .plyr{
+
+            border-radius:18px;
+            overflow:hidden;
+            margin-top:20px;
+        }
+
+        .plyr--audio{
+
+            background:#24140e;
+            box-shadow:
+                    inset 0 0 30px rgba(255,255,255,.02),
+                    0 15px 40px rgba(0,0,0,.5);
+
+            border:1px solid rgba(255,255,255,.05);
+        }
+
+        .plyr__controls{
+
+            padding:18px;
+        }
+
+        .plyr__control:hover{
+
+            background:#b97a56 !important;
+        }
+
+        .plyr__progress__buffer{
+
+            color:#3b2a22;
+        }
     </style>
 
 </head>
@@ -268,10 +320,11 @@
 <div class="container">
 
     <div class="header">
-        <h1>🎵 <span>QaTrak</span> Audio</h1>
+        <h1>🎵 <span>Noonica</span></h1>
         <p>🎧 برای پخش، روی هر آهنگ کلیک کنید</p>
 
-        <audio id="player" controls autoplay></audio>
+
+        <audio id="player"></audio>
     </div>
 
     <div class="list" id="playlist"></div>
@@ -370,7 +423,39 @@
         }
     });
 
+
 </script>
 
+<script src="/m/plyr.js"></script>
 </body>
+<script>
+
+    const plyr = new Plyr('#player', {
+
+        controls: [
+            // 'play-large',
+            // 'restart',
+            // 'rewind',
+            'play',
+            // 'fast-forward',
+            'progress',
+            // 'current-time',
+            // 'duration',
+            // 'mute',
+            // 'volume',
+            // 'settings'
+        ],
+
+        settings: [
+            'speed'
+        ],
+
+        speed: {
+            selected: 1,
+            options: [0.5,0.75,1,1.25,1.5,2]
+        }
+
+    });
+
+</script>
 </html>
