@@ -1,461 +1,1070 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noonica.ir</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F3EBDD">
+<title>نونیکا | قنادی · کافه · بیکری</title>
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=Harmattan:wght@600&family=Doto:wght@900&display=swap" rel="stylesheet">
+<style>
+    :root{
+        --bg:#F3EBDD;
+        --card:#FBF7F0;
+        --platter:#F6EFE3;
+        --maroon:#681616;
+        --text:#2b1810;
+        --text-muted:#9a8270;
+        --line:#DDCFBB;
+        --shadow-dark:rgba(120,82,48,.18);
+        --shadow-light:rgba(255,255,255,.95);
+        --safe-top:env(safe-area-inset-top, 0px);
+        --safe-bottom:env(safe-area-inset-bottom, 0px);
+    }
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet"
-          href="/m/plyr.css">
-    <style>
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-        }
+    *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
-        body{
-            font-family:Inter,sans-serif;
-            background:linear-gradient(145deg,#2c1810,#1a0f0a,#0d0805);
-            color:#f0e0d0;
-            min-height:100vh;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            padding:40px;
-        }
+    html, body{ background:var(--bg); }
 
-        .container{
-            width:900px;
-            max-width:100%;
-            background:linear-gradient(160deg,#3d231a,#2a1710,#1a0f0a);
-            backdrop-filter:blur(15px);
-            border:1px solid rgba(180,120,80,0.25);
-            border-radius:24px;
-            overflow:hidden;
-            box-shadow:0 25px 80px rgba(0,0,0,0.8), inset 0 1px 0 rgba(200,150,100,0.1);
-        }
+    body{
+        font-family:'Vazirmatn', sans-serif;
+        color:var(--text);
+        overflow-x:hidden;
+    }
 
-        .header{
-            padding:28px 32px;
-            border-bottom:1px solid rgba(180,120,80,0.15);
-            background:linear-gradient(180deg,rgba(60,35,25,0.6),transparent);
-        }
+    button{ font-family:inherit; }
 
-        .header h1{
-            font-size:28px;
-            font-weight:700;
-            color:#f0d5c0;
-            text-shadow:0 2px 10px rgba(0,0,0,0.5);
-            letter-spacing:-0.5px;
-        }
+    .neu{
+        border:none;
+        background:var(--card);
+        color:var(--maroon);
+        cursor:pointer;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        box-shadow:
+            6px 8px 16px var(--shadow-dark),
+            -6px -6px 14px var(--shadow-light),
+            inset 0 0 0 1px rgba(255,255,255,.9);
+        transition:box-shadow .15s, transform .15s;
+    }
 
-        .header h1 span{
-            color:#d4a080;
-        }
+    .neu:active{
+        transform:scale(.96);
+        box-shadow:
+            inset 4px 5px 10px var(--shadow-dark),
+            inset -4px -4px 10px var(--shadow-light);
+    }
 
-        .header p{
-            margin-top:8px;
-            color:#b8957a;
-            font-size:14px;
-            letter-spacing:0.3px;
-        }
+    .icon-btn{
+        width:48px;
+        height:48px;
+        border-radius:50%;
+    }
 
-        audio{
-            width:100%;
-            margin-top:22px;
-            background:#1a0f0a;
-            border-radius:12px;
-            height:54px;
-        }
+    .icon-btn svg{ width:22px; height:22px; }
 
-        audio::-webkit-media-controls-panel{
-            background:linear-gradient(135deg,#2a1710,#1a0f0a);
-            border-radius:12px;
-            border:1px solid rgba(180,120,80,0.2);
-        }
+    /* =========================================================
+       PLAYER VIEW (full screen)
+       ========================================================= */
+    .player-view{
+        min-height:100vh;
+        min-height:100dvh;
+        display:flex;
+        flex-direction:column;
+        background:
+            radial-gradient(600px 420px at 80% 8%, rgba(104,22,22,.07), transparent 70%),
+            var(--bg);
+    }
 
-        audio::-webkit-media-controls-current-time-display,
-        audio::-webkit-media-controls-time-remaining-display{
-            color:#d4a080;
-        }
+    .top{
+        display:grid;
+        grid-template-columns:48px 1fr 48px;
+        align-items:start;
+        padding:calc(18px + var(--safe-top)) 20px 0;
+        width:100%;
+        max-width:520px;
+        margin:0 auto;
+    }
 
-        audio::-webkit-media-controls-timeline{
-            background:#3d231a;
-            border-radius:4px;
-        }
+    .brand{
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:2px;
+    }
 
-        audio::-webkit-media-controls-volume-slider{
-            background:#3d231a;
-            border-radius:4px;
-        }
+    .brand img{
+        width:128px;
+        height:auto;
+        display:block;
+    }
 
-        .list{
-            max-height:520px;
-            overflow:auto;
-            padding:6px 0;
-        }
+    .brand img{ animation:logoIn .9s cubic-bezier(.2,.8,.2,1) both; }
 
-        .list::-webkit-scrollbar{
-            width:6px;
-        }
+    @keyframes logoIn{
+        from{ opacity:0; transform:translateY(-14px) scale(.92); filter:blur(4px); }
+        to{ opacity:1; transform:none; filter:none; }
+    }
 
-        .list::-webkit-scrollbar-track{
-            background:transparent;
-        }
+    /* slogan: words rise in, shimmer, then drift out and swap phrase */
+    .tagline{
+        font-family:'Harmattan', 'Vazirmatn', sans-serif;
+        font-weight:600;
+        font-size:21px;
+        line-height:1.5;
+        height:1.5em;
+        display:flex;
+        justify-content:center;
+        gap:.28em;
+        white-space:nowrap;
+    }
 
-        .list::-webkit-scrollbar-thumb{
-            background:#5a3a2a;
-            border-radius:20px;
-        }
+    .tagline span{
+        display:inline-block;
+        opacity:0;
+        transform:translateY(14px);
+        filter:blur(6px);
+        color:transparent;
+        background:linear-gradient(100deg, var(--maroon) 35%, #C98A5A 50%, var(--maroon) 65%);
+        background-size:300% 100%;
+        background-position:100% 0;
+        -webkit-background-clip:text;
+                background-clip:text;
+        transition:
+            opacity .7s cubic-bezier(.2,.7,.2,1),
+            transform .7s cubic-bezier(.2,.7,.2,1),
+            filter .7s cubic-bezier(.2,.7,.2,1);
+        transition-delay:calc(var(--i) * 110ms);
+    }
 
-        .list::-webkit-scrollbar-thumb:hover{
-            background:#7a4f3a;
-        }
+    .tagline.in span{
+        opacity:1;
+        transform:none;
+        filter:blur(0);
+        animation:shimmer 2.6s ease-in-out calc(.8s + var(--i) * 110ms) 1 both;
+    }
 
-        .item{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            padding:16px 28px;
-            cursor:pointer;
-            transition:all 0.3s ease;
-            border-bottom:1px solid rgba(180,120,80,0.06);
-            position:relative;
-        }
+    .tagline.out span{
+        opacity:0;
+        transform:translateY(-10px);
+        filter:blur(6px);
+        transition-duration:.45s;
+        transition-delay:calc(var(--i) * 50ms);
+    }
 
-        .item:hover{
-            background:linear-gradient(90deg,rgba(180,120,80,0.12),rgba(180,120,80,0.04));
-            padding-right:34px;
-        }
+    @keyframes shimmer{
+        from{ background-position:100% 0; }
+        to{ background-position:0 0; }
+    }
 
-        .item.active{
-            background:linear-gradient(90deg,#5a3a2a,rgba(90,58,42,0.6));
-            border-right:4px solid #d4a080;
-            box-shadow:inset 0 1px 0 rgba(200,150,100,0.1);
-        }
+    .top .icon-btn{ margin-top:6px; }
 
-        .item.active .item-name{
-            color:#f0d5c0;
-            font-weight:600;
-        }
+    /* ---------- Turntable ---------- */
+    .deck{
+        flex:1;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        padding:18px 20px 0;
+    }
 
-        .item-name{
-            font-size:15px;
-            color:#c9b09b;
-            transition:color 0.3s;
-            font-weight:400;
-            letter-spacing:0.2px;
-            display:flex;
-            align-items:center;
-            gap:12px;
-        }
+    .turntable{
+        position:relative;
+        width:min(calc(100vw - 44px), 42vh, 420px);
+        width:min(calc(100vw - 44px), 42dvh, 420px);
+        aspect-ratio:1 / .94;
+        background:linear-gradient(160deg, #FFFDF9, var(--platter));
+        border-radius:24px;
+        box-shadow:
+            0 30px 60px -28px rgba(104,22,22,.28),
+            inset 0 0 0 1px rgba(120,82,48,.08);
+    }
 
-        .item-name::before{
-            content:"♪";
-            color:#5a3a2a;
-            font-size:18px;
-            transition:color 0.3s;
-        }
+    .vinyl{
+        position:absolute;
+        width:74%;
+        aspect-ratio:1;
+        left:7%;
+        top:50%;
+        transform:translateY(-50%);
+        border-radius:50%;
+        box-shadow:0 14px 28px -10px rgba(0,0,0,.45);
+    }
 
-        .item.active .item-name::before{
-            color:#d4a080;
-        }
+    .vinyl-disc{
+        position:absolute;
+        inset:0;
+        border-radius:50%;
+        background:repeating-radial-gradient(circle, #161111 0 1.5px, #231b1b 1.5px 3px);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        animation:spin 2.4s linear infinite;
+        animation-play-state:paused;
+    }
 
-        .play-icon{
-            font-size:16px;
-            color:#7a4f3a;
-            transition:all 0.3s;
-            width:24px;
-            text-align:center;
-        }
+    .playing .vinyl-disc{ animation-play-state:running; }
 
-        .item.active .play-icon{
-            color:#d4a080;
-            transform:scale(1.1);
-        }
+    @keyframes spin{ to{ transform:rotate(360deg); } }
 
-        .item .track-number{
-            color:#5a3a2a;
-            font-size:13px;
-            font-weight:600;
-            margin-left:12px;
-            min-width:24px;
-        }
+    .vinyl-label{
+        width:38%;
+        aspect-ratio:1;
+        border-radius:50%;
+        background:radial-gradient(circle at 35% 30%, #FFFBF4, #EFE3D0);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
 
-        .item.active .track-number{
-            color:#d4a080;
-        }
+    .vinyl-label img{ width:62%; }
 
-        .item.playing .play-icon{
-            animation:pulse 1.2s ease-in-out infinite;
-        }
+    .vinyl-shine{
+        position:absolute;
+        inset:0;
+        border-radius:50%;
+        pointer-events:none;
+        background:conic-gradient(from 20deg,
+            transparent 0 8%, rgba(255,255,255,.10) 13%, transparent 19% 55%,
+            rgba(255,255,255,.07) 61%, transparent 67%);
+        -webkit-mask:radial-gradient(circle, transparent 0 20%, #000 20.5%);
+                mask:radial-gradient(circle, transparent 0 20%, #000 20.5%);
+    }
 
-        @keyframes pulse{
-            0%,100%{opacity:1;transform:scale(1);}
-            50%{opacity:0.5;transform:scale(0.9);}
-        }
+    .tonearm{
+        position:absolute;
+        right:3%;
+        top:2%;
+        height:80%;
+        transform-origin:50% 11.5%;
+        transition:transform .9s cubic-bezier(.5,0,.2,1);
+        filter:drop-shadow(-4px 6px 5px rgba(0,0,0,.18));
+    }
 
+    .playing .tonearm{ transform:rotate(21deg); }
 
-        .file-info{
-            display:flex;
-            align-items:center;
-            gap:10px;
-        }
+    .knob{
+        position:absolute;
+        bottom:6%;
+        width:13%;
+        aspect-ratio:1;
+        border-radius:50%;
+        border:1.5px solid #CDBEA9;
+    }
 
-        .item::after{
-            content:"";
-            position:absolute;
-            bottom:0;
-            left:0;
-            right:0;
-            height:1px;
-            background:linear-gradient(90deg,transparent,rgba(180,120,80,0.1),transparent);
-            opacity:0;
-            transition:opacity 0.3s;
-        }
+    .knob.l{ left:5%; }
+    .knob.r{ right:5%; }
 
-        .item:hover::after{
-            opacity:1;
-        }
+    .knob.l::before{
+        content:"";
+        position:absolute;
+        left:50%;
+        top:14%;
+        width:1.5px;
+        height:36%;
+        background:#CDBEA9;
+        transform:translateX(-50%);
+    }
 
-        /* رنگی کردن نام فایل‌ها با پسوند */
-        .item-name .ext{
-            color:#5a3a2a;
-            font-size:12px;
-            font-weight:300;
-        }
+    /* ---------- Meta ---------- */
+    .meta{
+        text-align:center;
+        margin-top:22px;
+        width:100%;
+        max-width:460px;
+    }
 
-        .item.active .ext{
-            color:#b07a5a;
-        }
+    .meta h2{
+        font-size:25px;
+        font-weight:800;
+        letter-spacing:-.3px;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        direction:ltr;
+    }
 
-        .track-count{
-            font-size:12px;
-            color:#5a3a2a;
-            background:rgba(90,58,42,0.3);
-            padding:2px 12px;
-            border-radius:20px;
-            border:1px solid rgba(180,120,80,0.1);
-        }
+    .meta p{
+        font-size:14px;
+        color:var(--text-muted);
+        margin-top:2px;
+        font-weight:500;
+    }
 
+    /* ---------- Controls (bottom arc) ---------- */
+    .controls-area{
+        position:relative;
+        margin-top:22px;
+        padding:30px 20px calc(28px + var(--safe-bottom));
+        overflow:hidden;
+    }
 
-        @keyframes slideIn{
-            from{opacity:0;transform:translateY(-8px);}
-            to{opacity:1;transform:translateY(0);}
-        }
+    .controls-area::before{
+        content:"";
+        position:absolute;
+        left:-20%;
+        right:-20%;
+        top:0;
+        bottom:0;
+        border-radius:50% 50% 0 0 / 70px 70px 0 0;
+        background:linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.55) 45%, rgba(251,247,240,.2));
+        pointer-events:none;
+    }
 
-        .item{
-            animation:slideIn 0.3s ease forwards;
-        }
+    .controls-inner{
+        position:relative;
+        max-width:420px;
+        margin:0 auto;
+    }
 
-        .item:nth-child(1){animation-delay:0.05s;}
-        .item:nth-child(2){animation-delay:0.1s;}
-        .item:nth-child(3){animation-delay:0.15s;}
-        .item:nth-child(4){animation-delay:0.2s;}
-        .item:nth-child(5){animation-delay:0.25s;}
-        .item:nth-child(6){animation-delay:0.3s;}
-        .item:nth-child(7){animation-delay:0.35s;}
-        .item:nth-child(8){animation-delay:0.4s;}
-        .item:nth-child(9){animation-delay:0.45s;}
-        .item:nth-child(10){animation-delay:0.5s;}
+    .wave{
+        height:46px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:3px;
+        cursor:pointer;
+        direction:ltr;
+        touch-action:none;
+    }
 
-        :root{
+    .wave span{
+        width:3px;
+        border-radius:3px;
+        background:var(--line);
+        transition:background .2s;
+    }
 
-            --plyr-color-main:#b97a56;
+    .wave span.on{ background:var(--maroon); }
 
-            --plyr-audio-controls-background:#24140e;
+    .playing .wave span{ animation:bar 1.1s ease-in-out infinite alternate; }
 
-            --plyr-menu-background:#2b1b13;
+    @keyframes bar{
+        from{ transform:scaleY(1); }
+        to{ transform:scaleY(.55); }
+    }
 
-            --plyr-tooltip-background:#b97a56;
+    .time{
+        text-align:center;
+        font-family:'Doto', 'Vazirmatn', monospace;
+        font-weight:900;
+        font-size:21px;
+        margin-top:10px;
+        direction:ltr;
+        letter-spacing:.5px;
+    }
 
-            --plyr-tooltip-color:#fff;
+    .controls{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:10px;
+        margin-top:22px;
+        direction:ltr;
+    }
 
-            --plyr-range-fill-background:#b97a56;
+    .pill{
+        width:30%;
+        max-width:116px;
+        height:54px;
+        border-radius:27px;
+    }
 
-            --plyr-range-thumb-background:#fff;
+    .pill svg{ width:20px; height:20px; opacity:.85; }
 
-            --plyr-control-icon-size:18px;
+    .knob-btn{
+        width:88px;
+        height:88px;
+        border-radius:50%;
+        flex-shrink:0;
+        position:relative;
+    }
 
-        }
+    .knob-btn::before{
+        content:"";
+        position:absolute;
+        inset:9px;
+        border-radius:50%;
+        background:linear-gradient(145deg, #FFFDF9, #F1E8DA);
+        box-shadow:inset 0 0 0 1px rgba(120,82,48,.07);
+    }
 
-        .plyr{
+    .knob-btn svg{
+        position:relative;
+        width:26px;
+        height:26px;
+    }
 
-            border-radius:18px;
-            overflow:hidden;
-            margin-top:20px;
-        }
+    /* =========================================================
+       PLAYLIST VIEW (full screen, slides in)
+       ========================================================= */
+    .list-view{
+        position:fixed;
+        inset:0;
+        z-index:20;
+        display:flex;
+        flex-direction:column;
+        background:
+            radial-gradient(600px 420px at 15% 10%, rgba(104,22,22,.06), transparent 70%),
+            var(--bg);
+        transform:translateX(-100%);
+        visibility:hidden;
+        transition:transform .45s cubic-bezier(.3,.7,.2,1), visibility 0s linear .45s;
+    }
 
-        .plyr--audio{
+    .list-view.open{
+        transform:none;
+        visibility:visible;
+        transition:transform .45s cubic-bezier(.3,.7,.2,1), visibility 0s;
+    }
 
-            background:#24140e;
-            box-shadow:
-                    inset 0 0 30px rgba(255,255,255,.02),
-                    0 15px 40px rgba(0,0,0,.5);
+    .list-top{
+        display:grid;
+        grid-template-columns:48px 1fr 48px;
+        align-items:center;
+        padding:calc(18px + var(--safe-top)) 20px 6px;
+        width:100%;
+        max-width:560px;
+        margin:0 auto;
+    }
 
-            border:1px solid rgba(255,255,255,.05);
-        }
+    .list-top h3{
+        text-align:center;
+        font-size:26px;
+        font-weight:800;
+        letter-spacing:-.4px;
+    }
 
-        .plyr__controls{
+    .list-top h3 small{
+        display:block;
+        font-size:12.5px;
+        font-weight:600;
+        color:var(--text-muted);
+        letter-spacing:0;
+        margin-top:-2px;
+    }
 
-            padding:18px;
-        }
+    .list{
+        flex:1;
+        overflow-y:auto;
+        width:100%;
+        max-width:560px;
+        margin:0 auto;
+        padding:0 20px;
+        scrollbar-width:none;
+        scroll-snap-type:y mandatory;
+        overscroll-behavior:contain;
+        -webkit-mask:linear-gradient(180deg, transparent, #000 14%, #000 82%, transparent);
+                mask:linear-gradient(180deg, transparent, #000 14%, #000 82%, transparent);
+    }
 
-        .plyr__control:hover{
+    .list::-webkit-scrollbar{ display:none; }
 
-            background:#b97a56 !important;
-        }
+    .row{
+        display:flex;
+        align-items:center;
+        gap:14px;
+        padding:8px;
+        border-radius:60px;
+        cursor:pointer;
+        margin-bottom:12px;
+        scroll-snap-align:center;
+        scroll-snap-stop:always;
+        transition:background .3s, box-shadow .3s;
+    }
 
-        .plyr__progress__buffer{
+    .row.active{
+        background:var(--card);
+        box-shadow:
+            8px 10px 22px var(--shadow-dark),
+            -6px -6px 16px var(--shadow-light);
+    }
 
-            color:#3b2a22;
-        }
-    </style>
+    .cover{
+        width:70px;
+        height:70px;
+        border-radius:50%;
+        flex-shrink:0;
+        background:repeating-radial-gradient(circle, #1a1313 0 1.5px, #261d1d 1.5px 3px);
+        box-shadow:0 8px 16px -8px rgba(0,0,0,.5);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
 
+    .cover i{
+        width:40%;
+        aspect-ratio:1;
+        border-radius:50%;
+        background:var(--c, #EFE3D0);
+        position:relative;
+    }
+
+    .cover i::after{
+        content:"";
+        position:absolute;
+        width:18%;
+        aspect-ratio:1;
+        border-radius:50%;
+        background:#1a1313;
+        top:50%;
+        left:50%;
+        transform:translate(-50%,-50%);
+    }
+
+    .row.is-playing .cover{ animation:spin 2.4s linear infinite; }
+
+    .row-text{ flex:1; min-width:0; }
+
+    .row-text b{
+        display:block;
+        font-size:17px;
+        font-weight:800;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        direction:ltr;
+        text-align:right;
+    }
+
+    .row-text small{
+        display:block;
+        font-size:13px;
+        color:var(--text-muted);
+        font-weight:500;
+        margin-top:1px;
+    }
+
+    .row-btn{
+        display:none;
+        height:40px;
+        padding:0 18px;
+        border-radius:20px;
+        font-size:14px;
+        font-weight:700;
+        margin-inline-end:6px;
+    }
+
+    .row.active .row-btn{ display:flex; }
+
+    .credit{
+        text-align:center;
+        font-size:10.5px;
+        color:var(--text-muted);
+        padding:8px 20px calc(14px + var(--safe-bottom));
+        opacity:.85;
+    }
+
+    /* ---------- Surprise overlay (shown only when the browser blocks autoplay) ---------- */
+    .surprise{
+        position:fixed;
+        inset:0;
+        z-index:50;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        padding:24px;
+        text-align:center;
+        cursor:pointer;
+        background:
+            radial-gradient(500px 380px at 50% 42%, rgba(255,255,255,.85), transparent 70%),
+            rgba(243,235,221,.94);
+        -webkit-backdrop-filter:blur(10px);
+                backdrop-filter:blur(10px);
+        transition:opacity .5s ease, transform .5s ease;
+    }
+
+    .surprise.leaving{
+        opacity:0;
+        transform:scale(1.04);
+        pointer-events:none;
+    }
+
+    .surprise > *{ animation:riseIn .8s cubic-bezier(.2,.8,.2,1) both; }
+    .surprise > :nth-child(1){ animation-delay:.05s; }
+    .surprise > :nth-child(2){ animation-delay:.25s; }
+    .surprise > :nth-child(3){ animation-delay:.4s; }
+    .surprise > :nth-child(4){ animation-delay:.6s; }
+
+    @keyframes riseIn{
+        from{ opacity:0; transform:translateY(18px); filter:blur(6px); }
+        to{ opacity:1; transform:none; filter:none; }
+    }
+
+    .surprise-logo{ width:96px; margin-bottom:26px; }
+
+    .surprise-disc{
+        position:relative;
+        width:150px;
+        height:150px;
+        margin-bottom:26px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+
+    .surprise-disc::before{
+        content:"";
+        position:absolute;
+        inset:0;
+        border-radius:50%;
+        background:repeating-radial-gradient(circle, #161111 0 1.5px, #231b1b 1.5px 3px);
+        box-shadow:0 18px 34px -12px rgba(0,0,0,.45);
+        animation:spin 3.2s linear infinite;
+    }
+
+    .surprise-disc::after{
+        content:"";
+        position:absolute;
+        inset:-14px;
+        border-radius:50%;
+        border:2px solid rgba(104,22,22,.35);
+        animation:ring 2s ease-out infinite;
+    }
+
+    @keyframes ring{
+        from{ transform:scale(.9); opacity:1; }
+        to{ transform:scale(1.25); opacity:0; }
+    }
+
+    .surprise .knob-btn{ width:78px; height:78px; z-index:1; }
+    .surprise .knob-btn svg{ margin-left:3px; }
+
+    .surprise h2{
+        font-family:'Harmattan', 'Vazirmatn', sans-serif;
+        font-weight:600;
+        font-size:44px;
+        line-height:1.2;
+        color:var(--maroon);
+    }
+
+    .surprise p{
+        font-size:17px;
+        font-weight:600;
+        color:var(--text);
+        margin-top:4px;
+        max-width:300px;
+        line-height:1.8;
+    }
+
+    [hidden]{ display:none !important; }
+
+    /* ---------- Small screens ---------- */
+    @media (max-width:480px){
+        .brand img{ width:112px; }
+        .tagline{ font-size:19px; }
+        .meta h2{ font-size:22px; }
+        .knob-btn{ width:80px; height:80px; }
+        .cover{ width:60px; height:60px; }
+        .row-text b{ font-size:15.5px; }
+    }
+
+    @media (max-height:700px){
+        .brand img{ width:96px; }
+        .tagline{ font-size:17px; }
+        .meta{ margin-top:14px; }
+        .controls-area{ margin-top:12px; padding-top:24px; }
+        .controls{ margin-top:14px; }
+        .knob-btn{ width:72px; height:72px; }
+        .pill{ height:48px; }
+    }
+
+    @media (prefers-reduced-motion:reduce){
+        .vinyl-disc, .cover, .wave span, .brand img, .tagline span,
+        .surprise > *, .surprise-disc::before, .surprise-disc::after{ animation:none !important; }
+        .tagline span{ transition:none !important; filter:none !important; }
+        .list-view{ transition:none !important; }
+    }
+</style>
 </head>
 <body>
 
-<div class="container">
+<!-- ===================== Player ===================== -->
+<main class="player-view" id="playerView">
+    <header class="top">
+        <span></span>
+        <div class="brand">
+            <img src="/assets/logo.svg" alt="نونیکا">
+            <p class="tagline" id="tagline" aria-label="نونیکا، خوشمزگیِ لحظه‌ها — قنادی · کافه · بیکری"></p>
+        </div>
+        <button class="neu icon-btn" id="openList" aria-label="لیست پخش">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18A3 3 0 1019 17V8h3V6h-5z"/></svg>
+        </button>
+    </header>
 
-    <div class="header">
-        <h1>🎵 <span>Noonica</span></h1>
-        <p>🎧 برای پخش، روی هر آهنگ کلیک کنید</p>
+    <section class="deck">
+        <div class="turntable">
+            <div class="vinyl">
+                <div class="vinyl-disc">
+                    <div class="vinyl-label"><img src="/assets/logo.svg" alt=""></div>
+                </div>
+                <div class="vinyl-shine"></div>
+            </div>
 
+            <svg class="tonearm" viewBox="0 0 60 260" aria-hidden="true">
+                <rect x="22" y="0" width="16" height="14" rx="3" fill="#8f8a84"/>
+                <circle cx="30" cy="30" r="20" fill="#F4ECE0" stroke="#D6C8B4" stroke-width="1.5"/>
+                <circle cx="30" cy="30" r="11" fill="#E7DCCB"/>
+                <path d="M30 30 V206 L20 232" stroke="#2a2222" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <rect x="10" y="226" width="18" height="26" rx="3" transform="rotate(24 19 239)" fill="#3a302e"/>
+                <rect x="27" y="120" width="6" height="12" rx="1" fill="#681616"/>
+            </svg>
 
-        <audio id="player"></audio>
-    </div>
+            <span class="knob l"></span>
+            <span class="knob r"></span>
+        </div>
+
+        <div class="meta">
+            <h2 id="trackTitle">&nbsp;</h2>
+            <p id="trackMood">&nbsp;</p>
+        </div>
+    </section>
+
+    <section class="controls-area">
+        <div class="controls-inner">
+            <div class="wave" id="wave" aria-label="نوار پیشرفت"></div>
+            <div class="time"><span id="curTime">0:00</span> / <span id="durTime">0:00</span></div>
+
+            <div class="controls">
+                <button class="neu pill" id="prevBtn" aria-label="آهنگ قبلی">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+                </button>
+                <button class="neu knob-btn" id="playBtn" aria-label="پخش">
+                    <svg id="playIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <button class="neu pill" id="nextBtn" aria-label="آهنگ بعدی">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                </button>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- ===================== Playlist ===================== -->
+<section class="list-view" id="listView" aria-label="لیست پخش">
+    <header class="list-top">
+        <button class="neu icon-btn" id="closeList" aria-label="بازگشت">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+        <h3>لیست پخش<small id="count"></small></h3>
+        <span></span>
+    </header>
 
     <div class="list" id="playlist"></div>
 
+    <p class="credit">موسیقی از Kevin MacLeod (incompetech.com) — مجوز CC BY 4.0</p>
+</section>
+
+<div class="surprise" id="surprise" role="button" aria-label="پخش موزیک" hidden>
+    <img class="surprise-logo" src="/assets/logo.svg" alt="نونیکا">
+    <div class="surprise-disc">
+        <span class="neu knob-btn">
+            <svg viewBox="0 0 24 24" fill="#681616"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+    </div>
+    <h2>سوپرایز!</h2>
+    <p>یه موزیک دلچسب برای لحظه‌های شما</p>
 </div>
 
+<audio id="player" preload="metadata"></audio>
+
 <script>
-
-
     const files = [
-        { src: "/audio/m01.mp3", name: "آهنگ شماره یک" },
-        { src: "/audio/m02.mp3", name: "آهنگ شماره دو" },
-        { src: "/audio/m03.mp3", name: "آهنگ شماره سه" },
-        { src: "/audio/m04.mp3", name: "آهنگ شماره چهار" },
-        { src: "/audio/m05.mp3", name: "آهنگ شماره پنج" },
-        { src: "/audio/m06.mp3", name: "آهنگ شماره شش" },
-        { src: "/audio/m07.mp3", name: "آهنگ شماره هفت" },
-        { src: "/audio/m08.mp3", name: "آهنگ شماره هشت" },
-        { src: "/audio/m09.mp3", name: "آهنگ شماره نه" },
-        { src: "/audio/m10.mp3", name: "آهنگ شماره ده" },
+        { src: "/audio/m01.mp3", name: "Bossa Antigua",     mood: "بوسا نوا · آرام",        color: "#EFE3D0" },
+        { src: "/audio/m02.mp3", name: "Cheery Monday",     mood: "گیتار آکوستیک · شاد",    color: "#681616" },
+        { src: "/audio/m03.mp3", name: "Carefree",          mood: "یوکولله · سرزنده",       color: "#D9A87E" },
+        { src: "/audio/m04.mp3", name: "Fig Leaf Rag",      mood: "پیانو رگ‌تایم · کلاسیک", color: "#F6EFE3" },
+        { src: "/audio/m05.mp3", name: "Easy Jam",          mood: "جاز سبک",                color: "#8E3B2F" },
+        { src: "/audio/m06.mp3", name: "Local Forecast",    mood: "لانژ · ملایم",           color: "#E4CFAF" },
+        { src: "/audio/m07.mp3", name: "Come Play with Me", mood: "گیتار · گرم",            color: "#B5553F" },
+        { src: "/audio/m08.mp3", name: "Thinking Music",    mood: "پیانو · آرام",           color: "#FBF7F0" },
+        { src: "/audio/m09.mp3", name: "Cool Vibes",        mood: "فانک · آروم",            color: "#4a0f0f" },
+        { src: "/audio/m10.mp3", name: "Killing Time",      mood: "جاز عصرگاهی",           color: "#CFB48E" },
     ];
 
-    const player = document.getElementById("player");
-    const playlist = document.getElementById("playlist");
-    let currentIndex = 0;
+    const $ = id => document.getElementById(id);
+    const player = $("player");
+    const playerView = $("playerView");
+    const listView = $("listView");
+    const playlist = $("playlist");
+    const wave = $("wave");
+    const playBtn = $("playBtn");
+    const surprise = $("surprise");
 
-    function load(index){
+    function showSurprise(){
+        surprise.classList.remove("leaving");
+        surprise.hidden = false;
+    }
 
-        if(index < 0 || index >= files.length) return;
+    function hideSurprise(){
+        if(surprise.hidden) return;
+        surprise.classList.add("leaving");
+        setTimeout(() => { surprise.hidden = true; surprise.classList.remove("leaving"); }, 500);
+    }
 
-        currentIndex = index;
-        player.src = files[index].src;
-        player.play();
+    const ICON_PLAY = '<path d="M8 5v14l11-7z"/>';
+    const ICON_PAUSE = '<path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/>';
 
+    let current = 0;
+    let dragging = false;
 
-        document.querySelectorAll(".item").forEach((x, i) => {
-            x.classList.remove("active", "playing");
-            if(i === index) {
-                x.classList.add("active", "playing");
-            }
+    /* ---- slogan motion ---- */
+    (() => {
+        const el = $("tagline");
+        const phrases = ["نونیکا، خوشمزگیِ لحظه‌ها", "قنادی · کافه · بیکری"];
+        let n = 0;
+
+        function show(){
+            el.className = "tagline";
+            el.innerHTML = phrases[n].split(" ")
+                .map((w, i) => `<span style="--i:${i}" aria-hidden="true">${w}</span>`).join("");
+            void el.offsetWidth;                       // restart transitions
+            el.classList.add("in");
+            setTimeout(() => el.classList.add("out"), 4200);
+            setTimeout(() => { n = (n + 1) % phrases.length; show(); }, 4900);
+        }
+
+        setTimeout(show, 350);
+    })();
+
+    const fmt = s => {
+        if(!isFinite(s) || s < 0) s = 0;
+        return `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+    };
+
+    /* ---- waveform ---- */
+    const BAR_COUNT = 34;
+    const bars = [];
+    for(let i = 0; i < BAR_COUNT; i++){
+        const b = document.createElement("span");
+        b.style.height = (10 + Math.abs(Math.sin(i * 1.7) * Math.cos(i * .45)) * 34) + "px";
+        b.style.animationDelay = (-(i * 0.13) % 1.1) + "s";
+        wave.appendChild(b);
+        bars.push(b);
+    }
+
+    function paintWave(ratio){
+        const on = Math.round(ratio * BAR_COUNT);
+        bars.forEach((b, i) => b.classList.toggle("on", i < on));
+    }
+
+    function seekFromEvent(e){
+        const first = bars[0].getBoundingClientRect().left;
+        const last = bars[BAR_COUNT - 1].getBoundingClientRect().right;
+        const ratio = Math.min(1, Math.max(0, (e.clientX - first) / (last - first)));
+        paintWave(ratio);
+        if(player.duration) $("curTime").textContent = fmt(ratio * player.duration);
+        return ratio;
+    }
+
+    wave.addEventListener("pointerdown", e => {
+        dragging = true;
+        wave.setPointerCapture(e.pointerId);
+        seekFromEvent(e);
+    });
+    wave.addEventListener("pointermove", e => { if(dragging) seekFromEvent(e); });
+    wave.addEventListener("pointerup", e => {
+        if(!dragging) return;
+        dragging = false;
+        const ratio = seekFromEvent(e);
+        if(player.duration) player.currentTime = ratio * player.duration;
+    });
+
+    /* ---- playlist ---- */
+    $("count").textContent = `${files.length} آهنگ`;
+
+    files.forEach((f, i) => {
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `
+            <div class="cover"><i style="--c:${f.color}"></i></div>
+            <div class="row-text"><b>${f.name}</b><small>${f.mood}</small></div>
+            <button class="neu row-btn">پخش</button>
+        `;
+        row.addEventListener("click", e => {
+            if(e.target.closest(".row-btn")) togglePlay();
+            else if(i !== focused) scrollToRow(i, true);
+        });
+        playlist.appendChild(row);
+    });
+
+    const rows = [...playlist.children];
+
+    let focused = 0;
+    let settleTimer = null;
+
+    /* arc + highlight follow the scroll position, like a wheel */
+    function layoutList(){
+        const playing = !player.paused;
+        const mid = playlist.scrollTop + playlist.clientHeight / 2;
+        const pitch = rows[0].offsetHeight + 12;
+        let nearest = 0, best = Infinity;
+
+        rows.forEach((row, i) => {
+            const center = row.offsetTop + row.offsetHeight / 2;
+            const d = Math.abs(center - mid) / pitch;
+            if(d < best){ best = d; nearest = i; }
+            row.style.marginInlineStart = (Math.min(d, 4) ** 1.6 * 14) + "px";
+            row.style.opacity = Math.max(.25, 1 - d * .2);
+        });
+
+        if(nearest !== focused && listView.classList.contains("open") && navigator.vibrate){
+            navigator.vibrate(6);
+        }
+        focused = nearest;
+
+        rows.forEach((row, i) => {
+            row.classList.toggle("active", i === focused);
+            row.classList.toggle("is-playing", i === focused && i === current && playing);
+            row.querySelector(".row-btn").textContent =
+                (i === focused && i === current && playing) ? "توقف" : "پخش";
         });
     }
 
+    function scrollToRow(i, smooth){
+        const row = rows[i];
+        const top = row.offsetTop - playlist.clientHeight / 2 + row.offsetHeight / 2;
+        playlist.scrollTo({ top, behavior: smooth ? "smooth" : "auto" });
+    }
 
-    files.forEach((file, index) => {
-
-        const div = document.createElement("div");
-        div.className = "item";
-        div.id = "track-" + index;
-
-
-        const ext = file.src.split('.').pop();
-
-        div.innerHTML = `
-        <div class="file-info">
-            <span class="track-number">${String(index + 1).padStart(2, '0')}</span>
-            <div class="item-name">
-                ${file.name}
-                <span class="ext">.${ext}</span>
-            </div>
-        </div>
-        <div class="play-icon">▶</div>
-    `;
-
-        div.onclick = () => load(index);
-        playlist.appendChild(div);
-
-    });
-
-
-    load(0);
-
-
-    player.addEventListener("ended", () => {
-        let next = currentIndex + 1;
-        if(next >= files.length) next = 0;
-        load(next);
-    });
-
-
-    player.addEventListener("play", () => {
-        document.querySelectorAll(".item").forEach(x => x.classList.remove("playing"));
-        const active = document.querySelector(".item.active");
-        if(active) active.classList.add("playing");
-    });
-
-    player.addEventListener("pause", () => {
-        document.querySelectorAll(".item").forEach(x => x.classList.remove("playing"));
-    });
-
-
-    player.addEventListener("play", () => {
-        const currentFile = files[currentIndex];
-        if(currentFile) {
-            document.title = `🎵 ${currentFile.name} - Noonica Audio`;
+    let ticking = false;
+    playlist.addEventListener("scroll", () => {
+        if(!ticking){
+            ticking = true;
+            requestAnimationFrame(() => { ticking = false; layoutList(); });
         }
+        clearTimeout(settleTimer);
+        settleTimer = setTimeout(() => {
+            layoutList();
+            // only a swipe/tap by the user switches the track, never our own programmatic scrolling
+            if(userScroll && listView.classList.contains("open") && focused !== current){
+                load(focused, true);
+                setTimeout(closeListView, 450);   // let the pick register visually, then back to the player
+            }
+            userScroll = false;
+        }, 160);
+    }, { passive:true });
+
+    let userScroll = false;
+    ["pointerdown", "touchstart", "wheel", "keydown"].forEach(type =>
+        playlist.addEventListener(type, () => { userScroll = true; }, { passive:true })
+    );
+
+    function padList(){
+        const pad = Math.max(0, playlist.clientHeight / 2 - rows[0].offsetHeight / 2);
+        playlist.style.paddingTop = pad + "px";
+        playlist.style.paddingBottom = pad + "px";
+    }
+
+    function centerActive(smooth){
+        scrollToRow(current, smooth);
+        layoutList();
+    }
+
+    /* ---- views (hash so the phone's back button works) ---- */
+    function syncView(){
+        const open = location.hash === "#playlist";
+        listView.classList.toggle("open", open);
+        playerView.inert = open;
+        listView.inert = !open;
+        if(open){
+            padList();
+            centerActive(false);
+        }
+    }
+
+    $("openList").addEventListener("click", () => {
+        history.pushState({ fromPlayer: true }, "", "#playlist");
+        syncView();
+    });
+    function closeListView(){
+        if(!listView.classList.contains("open")) return;
+        if(history.state && history.state.fromPlayer){
+            history.back();
+        } else {
+            history.replaceState(null, "", location.pathname);
+            syncView();
+        }
+    }
+
+    $("closeList").addEventListener("click", closeListView);
+    addEventListener("popstate", syncView);
+    addEventListener("resize", () => { padList(); centerActive(false); });
+
+    /* ---- playback ---- */
+    function load(i, autoplay){
+        current = (i + files.length) % files.length;
+        const f = files[current];
+        player.src = f.src;
+        $("trackTitle").textContent = f.name;
+        $("trackMood").textContent = f.mood;
+        $("curTime").textContent = "0:00";
+        $("durTime").textContent = "0:00";
+        paintWave(0);
+        layoutList();
+        centerActive(true);
+        updateMediaSession();
+        if(autoplay) attemptPlay();
+    }
+
+    function attemptPlay(){
+        const p = player.play();
+        if(p) p.then(hideSurprise).catch(showSurprise);
+    }
+
+    function togglePlay(){
+        player.paused ? attemptPlay() : player.pause();
+    }
+
+    function setPlayingUI(){
+        const playing = !player.paused;
+        playerView.classList.toggle("playing", playing);
+        $("playIcon").innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+        playBtn.setAttribute("aria-label", playing ? "توقف" : "پخش");
+        layoutList();
+    }
+
+    playBtn.addEventListener("click", togglePlay);
+    $("prevBtn").addEventListener("click", () => {
+        if(player.currentTime > 3){ player.currentTime = 0; return; }
+        load(current - 1, true);
+    });
+    $("nextBtn").addEventListener("click", () => load(current + 1, true));
+    surprise.addEventListener("click", attemptPlay);
+
+    player.addEventListener("play", () => { hideSurprise(); setPlayingUI(); });
+    player.addEventListener("pause", setPlayingUI);
+    player.addEventListener("ended", () => load(current + 1, true));
+    player.addEventListener("loadedmetadata", () => { $("durTime").textContent = fmt(player.duration); });
+    player.addEventListener("timeupdate", () => {
+        if(dragging || !player.duration) return;
+        paintWave(player.currentTime / player.duration);
+        $("curTime").textContent = fmt(player.currentTime);
     });
 
+    function updateMediaSession(){
+        if(!("mediaSession" in navigator)) return;
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: files[current].name,
+            artist: "نونیکا",
+            album: files[current].mood,
+            artwork: [{ src: "/assets/logo.svg", sizes: "512x512", type: "image/svg+xml" }],
+        });
+        navigator.mediaSession.setActionHandler("play", attemptPlay);
+        navigator.mediaSession.setActionHandler("pause", () => player.pause());
+        navigator.mediaSession.setActionHandler("previoustrack", () => load(current - 1, true));
+        navigator.mediaSession.setActionHandler("nexttrack", () => load(current + 1, true));
+    }
 
+    padList();
+    load(0, false);
+    syncView();
+    attemptPlay();
 </script>
-
-<script src="/m/plyr.js"></script>
 </body>
-<script>
-
-    const plyr = new Plyr('#player', {
-
-        controls: [
-            // 'play-large',
-            // 'restart',
-            // 'rewind',
-            'play',
-            // 'fast-forward',
-            'progress',
-            // 'current-time',
-            // 'duration',
-            // 'mute',
-            // 'volume',
-            // 'settings'
-        ],
-
-        settings: [
-            'speed'
-        ],
-
-        speed: {
-            selected: 1,
-            options: [0.5,0.75,1,1.25,1.5,2]
-        }
-
-    });
-
-</script>
 </html>
